@@ -3,12 +3,12 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "./firebase";
 
-// Styling & Assets
+import ProtectedRoute from "./ProtectedRoute.jsx";
 import Home from "./Home.jsx";
 import "./App.css";
-import uglyLogo from "./assets/tmou-logo.png"; 
+import uglyLogo from "./assets/tmou-logo.png";
 
-const my_email = "anjanarajap@gmail.com"; 
+const my_email = "anjanarajap@gmail.com";
 
 function App() {
   const navigate = useNavigate();
@@ -61,7 +61,14 @@ function App() {
           </div>
         }
       />
-      <Route path="/home" element={<Home />} />
+      <Route 
+        path="/home"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        } 
+      />
     </Routes>
   );
 }
