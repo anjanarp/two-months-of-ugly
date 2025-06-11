@@ -2,18 +2,26 @@ import "./Home.css";
 import logo from "./assets/tmou-logo.png";
 import { useState, useEffect } from "react"
 import { auth, db } from "./firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { collection, addDoc, getDocs, serverTimestamp, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, getDocs, serverTimestamp, onSnapshot, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+
+// helper to format a date in local timezone
+const getLocalDateString = (date = new Date()) => {
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+        .toISOString()
+        .split("T")[0];
+};
 
 function Home() {
     const navigate = useNavigate();
+    // input field for creating a new sprint
     const [newSprint, setNewSprint] = useState("");
-
+    // stores all the sprints that belong to the user
     const [allSprints, setAllSprints] = useState([]);
 
     const today = new Date();
 
+    // split into current sprints (ongoing) and past sprints (already ended)
     const currentSprints = allSprints.filter((sprint) => {
         const end = new Date(sprint.endDate);
         return end >= today;
@@ -24,58 +32,51 @@ function Home() {
         return end < today;
     });
 
+    // manually format a date string for display
+    const formatDate = (isoString) => {
+        const date = new Date(isoString);
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const year = date.getFullYear();
+        return `${month}/${day}/${year}`;
+    };
+
+    // fetch all sprints from firestore for the current user
     useEffect(() => {
         const user = auth.currentUser;
         if (!user) return;
-    
+
         const unsubscribe = onSnapshot(collection(db, "sprints"), (snapshot) => {
             const now = new Date();
-    
+
             const sprints = snapshot.docs
                 .map((doc) => {
                     const data = doc.data();
                     if (data.createdBy !== user.uid) return null;
-    
-                    let adjustedStreak = data.streak || 0;
-    
-                    if (data.lastLoggedAt) {
-                        const lastLogged = new Date(data.lastLoggedAt);
-                        const hoursSinceLastLog = (now - lastLogged) / (1000 * 60 * 60);
-    
-                        if (hoursSinceLastLog > 36) {
-                            adjustedStreak = 0;
-                        }
-                    } else {
-                        // if no logs ever made, streak is 0
-                        adjustedStreak = 0;
-                    }
-    
+
                     return {
                         id: doc.id,
                         ...data,
-                        streak: adjustedStreak,
                         showLog: false,
                     };
                 })
                 .filter(Boolean);
-    
+
             setAllSprints(sprints);
         });
-    
+
+        // clean up snapshot listener
         return () => unsubscribe();
     }, []);
-    
 
-
-
+    // add a new sprint when user presses + button
     const handleAddSprint = () => {
         if (!newSprint.trim()) return;
         addSprintToFirestore(newSprint);
         setNewSprint("");
     };
 
-
-
+    // hides all open log buttons if user clicks outside a card
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (
@@ -92,34 +93,57 @@ function Home() {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
-
+    // toggles the log button on current sprints
     const toggleLog = (clickedId) => {
         setAllSprints((prev) =>
             prev.map((sprint) =>
                 sprint.id === clickedId
                     ? { ...sprint, showLog: !sprint.showLog }
                     : new Date(sprint.endDate) >= today
-                    ? { ...sprint, showLog: false }
-                    : sprint
+                        ? { ...sprint, showLog: false }
+                        : sprint
             )
         );
     };
-    
+
+    // toggles the log button on past sprints
     const togglePastLog = (clickedId) => {
         setAllSprints((prev) =>
             prev.map((sprint) =>
                 sprint.id === clickedId
                     ? { ...sprint, showLog: !sprint.showLog }
                     : new Date(sprint.endDate) < today
-                    ? { ...sprint, showLog: false }
-                    : sprint
+                        ? { ...sprint, showLog: false }
+                        : sprint
             )
         );
-    };    
-    
+    };
 
+    // turns sprint title into a slug-safe format for the URL
+    const slugify = (str) =>
+        str
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)+/g, "");
 
+    // makes sure no two sprints have the same slug
+    const generateUniqueSlug = async (baseSlug) => {
+        let slug = baseSlug;
+        let counter = 1;
 
+        const sprintsRef = collection(db, "sprints");
+        let snapshot = await getDocs(query(sprintsRef, where("slug", "==", slug)));
+
+        while (!snapshot.empty) {
+            slug = `${baseSlug}-${counter}`;
+            counter++;
+            snapshot = await getDocs(query(sprintsRef, where("slug", "==", slug)));
+        }
+
+        return slug;
+    };
+
+    // creates a new sprint and saves it to firestore
     const addSprintToFirestore = async (sprintName) => {
         try {
             const user = auth.currentUser;
@@ -128,11 +152,15 @@ function Home() {
 
             sixtyDaysLater.setDate(today.getDate() + 60);
 
-            const formattedToday = today.toISOString().split("T")[0];
-            const formattedEnd = sixtyDaysLater.toISOString().split("T")[0];
+            const formattedToday = getLocalDateString(today);
+            const formattedEnd = getLocalDateString(sixtyDaysLater);
+
+            const rawSlug = slugify(sprintName);
+            const slug = await generateUniqueSlug(rawSlug);
 
             await addDoc(collection(db, "sprints"), {
                 title: sprintName.trim(),
+                slug,
                 startDate: formattedToday,
                 endDate: formattedEnd,
                 streak: 0,
@@ -151,20 +179,26 @@ function Home() {
         <div className="page-wrapper">
             <div className="home-wrapper">
                 <div className="column-layout">
+                    {/* top row with logo and streaks box */}
                     <div className="top-row-aligned">
                         <img src={logo} alt="Two Months of Ugly Logo" className="logo" />
 
-                        <div className="streaks-box">
-                            <h2>STREAKS</h2>
-                            {currentSprints.map((sprint, index) => (
-                                <p key={index}>
-                                    {sprint.title} &nbsp;&nbsp; {sprint.streak}🔥
-                                </p>
-                            ))}
+                        <div className="streaks-border">
+                            <div className="streaks-box">
+                                <h2>STREAKS</h2>
+                                {currentSprints.map((sprint, index) => (
+                                    <p key={index}>
+                                        {sprint.title} &nbsp;&nbsp; {sprint.streak}🔥
+                                    </p>
+                                ))}
+
+                            </div>
                         </div>
+
                     </div>
 
                     <div className="sprints-wrapper">
+                        {/* left side shows current sprints */}
                         <div className="sprints-section">
                             <h2>CURRENT SPRINTS</h2>
                             <div className="sprint-input-row">
@@ -184,7 +218,6 @@ function Home() {
                                     const endDate = new Date(sprint.endDate);
                                     const today = new Date();
                                     const daysLeft = Math.max(0, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
-                                
 
                                     return (
                                         <div
@@ -192,9 +225,13 @@ function Home() {
                                             key={sprint.id}
                                             onDoubleClick={() => toggleLog(sprint.id)}
                                         >
-                                            {sprint.showLog && <button className="log-btn">LOG</button>}
+                                            {sprint.showLog && (
+                                                <button className="log-btn" onClick={() => navigate(`/home/${sprint.slug}`)}>
+                                                    LOG
+                                                </button>
+                                            )}
                                             <h3>{sprint.title}</h3>
-                                            <p>STARTED ON {sprint.startDate}</p>
+                                            <p>STARTED ON {formatDate(sprint.startDate)}</p>
                                             <div className="days-left-row">
                                                 <div className="days-left-container">
                                                     <span className="days-left-label">DAYS</span>
@@ -208,6 +245,7 @@ function Home() {
                             </div>
                         </div>
 
+                        {/* right side shows completed sprints */}
                         <div className="past-sprints-section">
                             <h2>PAST SPRINTS</h2>
                             <div className="past-sprint-grid">
@@ -217,9 +255,13 @@ function Home() {
                                         className={`past-sprint-card ${sprint.showLog ? "expanded-right" : ""}`}
                                         onDoubleClick={() => togglePastLog(sprint.id)}
                                     >
-                                        {sprint.showLog && <button className="past-log-btn">LOG</button>}
+                                        {sprint.showLog && (
+                                            <button className="past-log-btn" onClick={() => navigate(`/home/${sprint.slug}`)}>
+                                                LOG
+                                            </button>
+                                        )}
                                         <h3>{sprint.title}</h3>
-                                        <p>{sprint.startDate} – {sprint.endDate}</p>
+                                        <p>{formatDate(sprint.startDate)} — {formatDate(sprint.endDate)}</p>
                                     </div>
                                 ))}
                             </div>

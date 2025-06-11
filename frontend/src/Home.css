@@ -1,3 +1,4 @@
+/* global page styling */
 body,
 html {
     margin: 0;
@@ -9,9 +10,10 @@ html {
     color: black;
     letter-spacing: -1px;
     line-height: .75;
+    -webkit-text-stroke: 0.3px black;
 }
 
-
+/* wrapper that lets page scroll vertically */
 .page-wrapper {
     height: 100vh;
     overflow-y: auto;
@@ -19,7 +21,18 @@ html {
     background-color: white;
 }
 
+.page-wrapper::-webkit-scrollbar {
+    display: none;
+}
 
+.page-wrapper {
+    /* IE/Edge */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+}
+
+/* top-level layout container */
 .home-wrapper {
     min-width: 1440px;
     padding: 4rem 6rem;
@@ -29,6 +42,7 @@ html {
     align-items: flex-start;
 }
 
+/* holds all sections inside the home page vertically */
 .column-layout {
     display: flex;
     flex-direction: column;
@@ -36,7 +50,7 @@ html {
     width: 100%;
 }
 
-
+/* logo and streaks appear side by side at the top */
 .top-row-aligned {
     display: flex;
     align-items: flex-start;
@@ -44,16 +58,20 @@ html {
     gap: 4rem;
 }
 
-
+/* big ugly logo on top left */
 .logo {
     width: 320px;
     height: auto;
     object-fit: contain;
 }
 
-
-.streaks-box {
+.streaks-border {
     border: 3px solid black;
+}
+
+/* box that shows each current streak */
+.streaks-box {
+    border: 3px solid rgb(255, 255, 255);
     padding: 0.5rem 1rem;
     width: 340px;
     height: 220px;
@@ -65,8 +83,20 @@ html {
     justify-content: flex-start;
     align-items: flex-start;
     gap: 0;
-
+    overflow-y: auto;
 }
+
+.streaks-box::-webkit-scrollbar {
+    display: none;
+}
+
+.streaks-box {
+    /* IE/Edge */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+}
+
 
 .streaks-box h2 {
     font-size: 4.5rem;
@@ -78,6 +108,7 @@ html {
     user-select: none;
 }
 
+
 .streaks-box p {
     margin: 0;
     line-height: 1.1;
@@ -85,7 +116,15 @@ html {
     user-select: none;
 }
 
+/* both current and past sprints sit side by side */
+.sprints-wrapper {
+    display: flex;
+    gap: 8rem;
+    width: 100%;
+    align-items: flex-start;
+}
 
+/* section for current sprints */
 .sprints-section {
     margin-top: 4rem;
     width: 500px;
@@ -102,6 +141,7 @@ html {
     user-select: none;
 }
 
+/* input row for new sprint creation */
 .sprint-input-row {
     display: flex;
     align-items: center;
@@ -125,6 +165,7 @@ html {
 .sprint-input::placeholder {
     color: rgba(0, 0, 0, 0.3);
     letter-spacing: -2px;
+    -webkit-text-stroke: 0px black;
 }
 
 .sprint-add-btn {
@@ -146,14 +187,14 @@ html {
     box-shadow: none;
 }
 
-
+/* grid for displaying current sprints */
 .sprint-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 5rem 3rem;
 }
 
-
+/* sprint card styles */
 .sprint-card {
     font-family: 'Arial Narrow', sans-serif;
     font-weight: 900;
@@ -188,6 +229,11 @@ html {
     user-select: none;
 }
 
+.sprint-card.expanded {
+    transform: translateY(4.2rem);
+}
+
+/* the days-left box inside a sprint card */
 .days-left-row {
     display: flex;
     align-items: center;
@@ -218,8 +264,7 @@ html {
     line-height: 1;
 }
 
-
-
+/* log button that appears when you double click */
 .log-btn {
     position: absolute;
     top: -3.5rem;
@@ -237,12 +282,13 @@ html {
     border-radius: 0;
     outline: none;
     box-shadow: none;
+    letter-spacing: -.8px;
 }
 
 .log-btn:hover {
     outline: none;
     box-shadow: none;
-    border: 1px solid black;
+    border: 2.5px solid black;
     background-color: white;
     color: black;
 }
@@ -252,18 +298,7 @@ html {
     box-shadow: none;
 }
 
-.sprint-card.expanded {
-    transform: translateY(4.2rem);
-}
-
-.sprints-wrapper {
-    display: flex;
-    gap: 8rem;
-    width: 100%;
-    align-items: flex-start;
-}
-
-
+/* section for past sprints on the right */
 .past-sprints-section {
     margin-top: 4.55rem;
     width: 500px;
@@ -286,6 +321,7 @@ html {
     gap: 1rem;
 }
 
+/* individual card for past sprint */
 .past-sprint-card {
     font-family: 'Arial Narrow', sans-serif;
     font-weight: 900;
@@ -314,7 +350,11 @@ html {
     transform: translateX(7rem);
 }
 
+.past-sprint-card.expanded {
+    transform: translateX(4.2rem);
+}
 
+/* log button for past sprint */
 .past-log-btn {
     position: absolute;
     top: 0;
@@ -332,12 +372,13 @@ html {
     border-radius: 0;
     outline: none;
     box-shadow: none;
+    letter-spacing: -.8px;
 }
 
 .past-log-btn:hover {
     outline: none;
     box-shadow: none;
-    border: 1px solid black;
+    border: 2.5px solid black;
     background-color: white;
     color: black;
 }
@@ -347,13 +388,8 @@ html {
     box-shadow: none;
 }
 
-
-.past-sprint-card.expanded {
-    transform: translateX(4.2rem);
-}
-
-
+/* prevent user from selecting card text */
 .sprint-card,
 .past-sprint-card {
-  user-select: none;
+    user-select: none;
 }
