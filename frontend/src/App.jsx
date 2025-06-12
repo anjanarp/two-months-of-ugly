@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "./firebase";
+import { auth, provider } from "./firebase.js";
 
 // importing internal components and styles
 import ProtectedRoute from "./ProtectedRoute.jsx";

@@ -1,7 +1,7 @@
 import "./Home.css";
 import logo from "./assets/tmou-logo.png";
 import { useState, useEffect } from "react"
-import { auth, db } from "./firebase";
+import { auth, db } from "./firebase.js";
 import { collection, addDoc, getDocs, serverTimestamp, onSnapshot, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { collection, query, where, getDocs, serverTimestamp, doc, writeBatch, onSnapshot, orderBy } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
-import { auth, db, storage } from "./firebase";
+import { auth, db, storage } from "./firebase.js";
 import "./SprintLog.css";
 
 // helper to get date in local time
