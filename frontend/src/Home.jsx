@@ -34,12 +34,13 @@ function Home() {
 
     // manually format a date string for display
     const formatDate = (isoString) => {
-        const date = new Date(isoString);
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const year = date.getFullYear();
+        const localDate = new Date(isoString + "T00:00:00");
+        const month = localDate.getMonth() + 1;
+        const day = localDate.getDate();
+        const year = localDate.getFullYear();
         return `${month}/${day}/${year}`;
     };
+    
 
     // fetch all sprints from firestore for the current user
     useEffect(() => {

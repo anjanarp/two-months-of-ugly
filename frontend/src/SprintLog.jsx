@@ -67,10 +67,10 @@ function SprintLog() {
 
     // format iso to mm/dd/yyyy
     const formatDate = (isoString) => {
-        const date = new Date(isoString);
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const year = date.getFullYear();
+        const localDate = new Date(isoString + "T00:00:00");
+        const month = localDate.getMonth() + 1;
+        const day = localDate.getDate();
+        const year = localDate.getFullYear();
         return `${month}/${day}/${year}`;
     };
 
@@ -112,6 +112,11 @@ function SprintLog() {
 
     // wait to render until sprint is loaded
     if (!sprint) return null;
+
+    // helper to treat YYYY-MM-DD strings as local calendar days
+    function localMidnight(dateStr) {
+        return new Date(dateStr + "T00:00:00");
+    }
 
     // handles saving the log to firestore
     const handleSubmit = async () => {
@@ -181,13 +186,8 @@ function SprintLog() {
                 updateStreak = true;
                 newStreak = 1;
             } else {
-                const lastStr = sprint.lastLoggedDate;
-                // const lastDate = new Date(lastStr);
-                const lastDate = new Date(new Date(lastStr).getTime() + new Date().getTimezoneOffset() * 60000);
-
-                // const currentDate = new Date(todayStr);
-                const currentDate = new Date(new Date(todayStr).getTime() + new Date().getTimezoneOffset() * 60000);
-
+                const lastDate = localMidnight(sprint.lastLoggedDate);
+                const currentDate = localMidnight(todayStr);
                 const diffDays = Math.floor((currentDate - lastDate) / (1000 * 60 * 60 * 24));
 
                 if (diffDays === 1) {
