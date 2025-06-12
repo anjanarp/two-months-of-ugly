@@ -182,8 +182,12 @@ function SprintLog() {
                 newStreak = 1;
             } else {
                 const lastStr = sprint.lastLoggedDate;
-                const lastDate = new Date(lastStr);
-                const currentDate = new Date(todayStr);
+                // const lastDate = new Date(lastStr);
+                const lastDate = new Date(new Date(lastStr).getTime() + new Date().getTimezoneOffset() * 60000);
+
+                // const currentDate = new Date(todayStr);
+                const currentDate = new Date(new Date(todayStr).getTime() + new Date().getTimezoneOffset() * 60000);
+
                 const diffDays = Math.floor((currentDate - lastDate) / (1000 * 60 * 60 * 24));
 
                 if (diffDays === 1) {
