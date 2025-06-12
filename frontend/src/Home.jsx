@@ -40,7 +40,7 @@ function Home() {
         const year = localDate.getFullYear();
         return `${month}/${day}/${year}`;
     };
-    
+
 
     // fetch all sprints from firestore for the current user
     useEffect(() => {
@@ -219,6 +219,9 @@ function Home() {
                                     const endDate = new Date(sprint.endDate);
                                     const today = new Date();
                                     const daysLeft = Math.max(0, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
+
+                                    console.log("Raw startDate:", sprint.startDate);
+                                    console.log("Formatted date:", formatDate(sprint.startDate));
 
                                     return (
                                         <div
