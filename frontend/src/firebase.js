@@ -1,3 +1,5 @@
+console.log("THIS IS THE VITE_API_KEY:", import.meta.env.VITE_API_KEY);
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
