@@ -576,7 +576,7 @@ label.log-btn-inline {
     padding-top: 0.25rem;
     width: 100%;
     min-width: 100%;
-    margin-left: -2rem;
+    margin-left: -4rem;
 }
 
 .entry-item {
@@ -584,7 +584,7 @@ label.log-btn-inline {
     min-width: 300px;
     max-width: 400px;
     padding-right: 4rem;
-    padding-right: 2rem;
+    padding-left: 4rem;
 }
 
 .text-blurb-box {
