@@ -91,11 +91,11 @@ body {
 
 .sprint-header-block:hover .back-arrow {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(1.75rem);
 }
 
 .sprint-header-block:hover .sprint-header-content {
-    transform: translateX(8rem);
+    transform: translateX(5rem);
 }
 
 /* main horizontal layout between log feed and log input */
@@ -571,21 +571,65 @@ label.log-btn-inline {
 
 .entry-scroll-row {
     display: flex;
-    gap: 1rem;
+    flex-wrap: nowrap;
+    gap: 2rem;
     overflow-x: auto;
-    padding-top: 0.25rem;
+    padding: 1rem 0;
     width: 100%;
-    min-width: 100%;
-    margin-left: -4rem;
+    box-sizing: border-box;
 }
 
 .entry-item {
-    flex: 1;
-    min-width: 300px;
+    flex: 0 0 auto;
+    min-width: 320px;
     max-width: 400px;
-    padding-right: 4rem;
-    padding-left: 4rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 0.5rem 0;
 }
+
+.entry-content-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+}
+
+.entry-content-box>* {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+audio,
+video,
+embed {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+}
+
+.preview-media {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
+}
+
+audio.preview-media {
+    min-height: 48px;
+    background-color: #ffffff;
+}
+
+
 
 .text-blurb-box {
     width: 400px;
@@ -599,8 +643,4 @@ label.log-btn-inline {
     overflow-y: auto;
     word-break: break-word;
     line-height: 1.3;
-}
-
-.text-blurb-text {
-    margin: 0;
 }

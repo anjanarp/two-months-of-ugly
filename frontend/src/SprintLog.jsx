@@ -288,55 +288,57 @@ function SprintLog() {
                                         <div className="entry-scroll-row">
                                             {log.entries.map((entry, idx) => (
                                                 <div key={idx} className="entry-item">
-                                                    {entry.type === "text" && (
-                                                        <div className="text-blurb-box">
-                                                            <p className="text-blurb-text">{entry.content}</p>
-                                                        </div>
-                                                    )}
+                                                    <div className="entry-content-box">
+                                                        {entry.type === "text" && (
+                                                            <div className="text-blurb-box">
+                                                                <p className="text-blurb-text">{entry.content}</p>
+                                                            </div>
+                                                        )}
 
-                                                    {entry.type === "code" && (
-                                                        <div className="code-snippet-box">
-                                                            <pre className="code-block">{entry.content}</pre>
-                                                            <p className="code-filename">{entry.filename}</p>
-                                                        </div>
-                                                    )}
+                                                        {entry.type === "code" && (
+                                                            <div className="code-snippet-box">
+                                                                <pre className="code-block">{entry.content}</pre>
+                                                                <p className="code-filename">{entry.filename}</p>
+                                                            </div>
+                                                        )}
 
-                                                    {entry.type === "image" && (
-                                                        <img src={entry.url} alt={entry.fileName} className="preview-media" />
-                                                    )}
+                                                        {entry.type === "image" && (
+                                                            <img src={entry.url} alt={entry.fileName} className="preview-media" />
+                                                        )}
 
-                                                    {entry.type === "audio" && (
-                                                        <audio controls className="preview-media">
-                                                            <source src={entry.url} type={entry.fileType} />
-                                                        </audio>
-                                                    )}
+                                                        {entry.type === "audio" && (
+                                                            <audio controls className="preview-media">
+                                                                <source src={entry.url} type={entry.fileType} />
+                                                            </audio>
+                                                        )}
 
-                                                    {entry.type === "video" && (
-                                                        <video controls width="300" className="preview-media">
-                                                            <source src={entry.url} type={entry.fileType} />
-                                                        </video>
-                                                    )}
+                                                        {entry.type === "video" && (
+                                                            <video controls width="300" className="preview-media">
+                                                                <source src={entry.url} type={entry.fileType} />
+                                                            </video>
+                                                        )}
 
-                                                    {entry.type === "pdf" && (
-                                                        <div className="pdf-entry-block">
-                                                            <a
-                                                                href={entry.url}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="pdf-link-box"
-                                                            >
-                                                                <div className="pdf-box-content">
-                                                                    📄 {entry.fileName}
-                                                                </div>
-                                                            </a>
+                                                        {entry.type === "pdf" && (
+                                                            <div className="pdf-entry-block">
+                                                                <a
+                                                                    href={entry.url}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="pdf-link-box"
+                                                                >
+                                                                    <div className="pdf-box-content">
+                                                                        📄 {entry.fileName}
+                                                                    </div>
+                                                                </a>
 
-                                                            <embed
-                                                                src={entry.url}
-                                                                type="application/pdf"
-                                                                className="pdf-preview-embed"
-                                                            />
-                                                        </div>
-                                                    )}
+                                                                <embed
+                                                                    src={entry.url}
+                                                                    type="application/pdf"
+                                                                    className="pdf-preview-embed"
+                                                                />
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
