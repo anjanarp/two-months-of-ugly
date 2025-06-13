@@ -220,8 +220,6 @@ function Home() {
                                     const today = new Date();
                                     const daysLeft = Math.max(0, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
 
-                                    console.log("Raw startDate:", sprint.startDate);
-                                    console.log("Formatted date:", formatDate(sprint.startDate));
 
                                     return (
                                         <div
