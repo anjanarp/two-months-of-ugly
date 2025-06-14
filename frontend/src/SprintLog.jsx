@@ -538,16 +538,16 @@ function SprintLog() {
                                                     <img
                                                         src={entry.fileDataUrl}
                                                         alt={entry.fileName}
-                                                        className="preview-media"
+                                                        className="preview"
                                                     />
                                                 )}
                                                 {entry.fileType.startsWith("audio/") && (
-                                                    <audio controls className="preview-media">
+                                                    <audio controls className="preview">
                                                         <source src={entry.fileDataUrl} type={entry.fileType} />
                                                     </audio>
                                                 )}
                                                 {entry.fileType.startsWith("video/") && (
-                                                    <video controls width="320" height="240" className="preview-media">
+                                                    <video controls width="320" height="240" className="preview">
                                                         <source src={entry.fileDataUrl} type={entry.fileType} />
                                                     </video>
                                                 )}
@@ -557,7 +557,7 @@ function SprintLog() {
                                                         type="application/pdf"
                                                         width="320"
                                                         height="245"
-                                                        className="preview-media"
+                                                        className="preview"
                                                     />
                                                 )}
                                             </div>
