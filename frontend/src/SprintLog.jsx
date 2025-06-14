@@ -58,7 +58,7 @@ function SprintLog() {
                 id: doc.id,
                 ...doc.data(),
             }));
-            console.log("Fetched logs:", logs);
+            // console.log("Fetched logs:", logs);
             setLogDocs(logs);
         });
 
