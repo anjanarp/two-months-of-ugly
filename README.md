@@ -31,7 +31,6 @@ The log page UI of one sprint:
   - Streaks automatically update based on logging activity.  
   - Logs display in reverse chronological order with formatted previews.
  
-**This is the start. It is enough to keep me accountable on the day to day in the growing list of things I want to master but have kept pushing out, due to a lack of visual accountability. I eventually see myself expanding this tool to use semantic analysis, combined with other meta data I collect about a log (total time spent, length of text blurbs and quality, and number of media types in one log), to generate momentum scores to show if my trajectory in a sprint is on the rise or if I am losing steam. I also want to start a section where I can add in fleeting thoughts, ideas, milestones, new learning domains I want to explore, and quotes that inspire me, and see them learn to group themselves into relevancy clusters.**
 
 ## Tech Stack
 - **Frontend:** Vite + React + React Router  
