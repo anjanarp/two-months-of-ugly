@@ -3,6 +3,12 @@
 ## Purpose
 This project is a personal growth experiment and public learning log. It tracks 60-day “sprints” where the creator documents daily progress across different interests, embracing imperfect work as proof of learning.  
 The app serves as both a dashboard for ongoing sprints and a log system for capturing text, code, and media entries.
+<img width="1512" height="942" alt="landing page" src="https://github.com/user-attachments/assets/cce78d92-a01c-4541-aa65-e605d79d9e8d" />
+<img width="1512" height="943" alt="home page" src="https://github.com/user-attachments/assets/145c08b0-0d4e-464d-adbe-c622514d3b53" />
+<img width="1512" height="943" alt="logging modal" src="https://github.com/user-attachments/assets/f08c2804-abab-4b8a-a537-6122113eaff0" />
+<img width="1511" height="944" alt="logs" src="https://github.com/user-attachments/assets/7183e4ce-c6c8-4691-936a-993225823c6c" />
+
+
 
 ## Current Features
 - **Google Authentication** (restricted to the creator’s email for now)  
